@@ -8,7 +8,8 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
-from .models import Questions, Team, Events, SolvedTimestamps, Machines, SolvedQuestions, SolvedMachines,TakenQuestionHint
+# from .models import Questions, Team, Events, SolvedTimestamps, Machines, SolvedQuestions, SolvedMachines,TakenQuestionHint
+from .models import Questions, Team, SolvedTimestamps, Machines, SolvedQuestions, SolvedMachines,TakenQuestionHint
 import CTFFinal.settings as settings 
 from django.utils import timezone
 from constance import config
@@ -55,28 +56,45 @@ def register(request):
 	team = Team()
 	if request.method == "POST":
 
-		receiptid = request.POST.get("receiptid")
+		# receiptid = request.POST.get("receiptid")
+		# team.username = request.POST.get("teamname")
+		# team.password = make_password(request.POST.get("passwd"))
+		
+		# if settings.MODE == 'production':
+		# 	result = Events.objects.using("receipts").filter(receiptid = receiptid)
+		# 	query_count = len(result)
+		# 	team.email = result[0].email1
+		# 	team.first_name = result[0].name1
+
+		# elif settings.MODE == 'development':
+		# 	query_count = (Events.objects.filter(receiptid = receiptid).count())
+		
+		# try:
+		# 	if query_count == 0:
+		# 		raise TypeError
+
+		# 	team.clean_fields()
+		# 	team.save()
+		# except Exception as e:
+		# 	messages.error(request, "Invalid form submission! Check your data correctly.")
+		# 	return render(request, "app/register.html")
+
 		team.username = request.POST.get("teamname")
 		team.password = make_password(request.POST.get("passwd"))
-		
-		if settings.MODE == 'production':
-			result = Events.objects.using("receipts").filter(receiptid = receiptid)
-			query_count = len(result)
-			team.email = result[0].email1
-			team.first_name = result[0].name1
+		team.email = request.POST.get("email")
 
-		elif settings.MODE == 'development':
-			query_count = (Events.objects.filter(receiptid = receiptid).count())
-		
+		print({'sername': team.username})
+		print({'email': team.email})
+		print({'password': team.password})
+
 		try:
-			if query_count == 0:
-				raise TypeError
-
 			team.clean_fields()
 			team.save()
 		except Exception as e:
+			print(e)
 			messages.error(request, "Invalid form submission! Check your data correctly.")
 			return render(request, "app/register.html")
+
 		login(request, team)
 		return render(request, "app/instructions.html")
 	return render(request, "app/register.html")
@@ -125,6 +143,7 @@ def waiting(request):
 
 
 @login_required(login_url="/login/")
+
 def machine(request,id = 1):
 
 	if timezone.localtime().timestamp() < config.START_TIME.timestamp():
@@ -332,3 +351,4 @@ def validate_username(request):
 	if data["is_taken"]:
 		data["error_message"] = "A user with this username already exists."
 	return JsonResponse(data)
+

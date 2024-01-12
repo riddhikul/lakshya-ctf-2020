@@ -99,15 +99,19 @@
                             {% csrf_token %}
                             <div class="row  hackerFont">
                                 <div class="col-md-6">
-                                    <div class="form-group">
+                                    {% comment %} <div class="form-group">
                                         <input type="text" class="form-control" name="receiptid" id="receiptid" placeholder="RecieptId(ex. EINC-5e5a93e4318db)" required>
                                         <small id="reciept_id_help" class="form-text text-muted">Don't have reciept id? Register <a target="_blank" href="http://pictinc.org/subevents_register/online/index1.php">here</a></small>
-                                    </div>
+                                    </div> {% endcomment %}
                                     <div class="form-group">
                                         <input type="text" class="form-control" name="teamname" id="teamname" placeholder="Username" required>
                                         <div class="invalid-feedback">
                                            This username already exists.
                                         </div>
+                                    </div>
+                                    <div class="form-group">
+                                        {% comment %} added email form  {% endcomment %}
+                                        <input type="email_address" class="form-control" name="email" id="email" placeholder="emailid" required>
                                     </div>
                                     <div class="form-group">
                                         <input type="password" class="form-control" id="passwd" name="passwd" placeholder="New Password" required>
