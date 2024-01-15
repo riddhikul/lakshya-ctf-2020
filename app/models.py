@@ -6,6 +6,8 @@ from django.contrib import admin
 from django.utils import timezone
 from datetime import timedelta
 from constance import config
+from django.http import HttpResponse
+import csv
 
 # Create your models here. Use set_password
 EASY = "EA"
@@ -17,6 +19,8 @@ QUESTION_CATEGORY = (("web", "Web"), ("reversing", "Reversing"), ("steg", "Stega
 
 
 class Team(AbstractUser):
+    fullname = models.CharField(max_length=255)
+    phone = models.CharField(max_length=15)
 
     points = models.IntegerField(default=0)
     timeRequired = models.FloatField(default=0,verbose_name="Time required")
@@ -29,7 +33,25 @@ class Team(AbstractUser):
         return self.username
 class TeamAdmin(admin.ModelAdmin):
 
-    list_display = ("username", "timeRequired", "points","email")
+    def export_as_csv(self, request, queryset):
+
+        meta = self.model._meta
+        field_names = [field.name for field in meta.fields]
+
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename={}.csv'.format(meta)
+        writer = csv.writer(response)
+
+        writer.writerow(field_names)
+        for obj in queryset:
+            row = writer.writerow([getattr(obj, field) for field in field_names])
+
+        return response
+
+    export_as_csv.short_description = "Export Selected"
+    actions = ("export_as_csv",)
+
+    list_display = ("username", "timeRequired", "points", "email", "fullname", "phone")
     readonly_fields = ("password", "points", "timeRequired")
     search_fields = ["username", "timeRequired", "points"]
 class Questions(models.Model):
@@ -156,11 +178,11 @@ class TakenQuestionHint(models.Model):
 #     email6 = models.CharField(max_length=100)
 #     phone6 = models.BigIntegerField()
 
-    def __str__(self):
-        return self.receiptid
+    # def __str__(self):
+    #     return self.receiptid
 
-    class Meta:
-        managed = False
-        db_table = "events"
-        verbose_name = "Event"
-        verbose_name_plural = "Events"
+    # class Meta:
+    #     managed = False
+    #     db_table = "events"
+    #     verbose_name = "Event"
+    #     verbose_name_plural = "Events"

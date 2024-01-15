@@ -107,10 +107,17 @@
                                            This username already exists.
                                         </div>
                                     </div>
+                                    {% comment %} Added extra fields  {% endcomment %}
                                     <div class="form-group">
-                                        {% comment %} added email form  {% endcomment %}
-                                        <input type="email_address" class="form-control" name="email" id="email" placeholder="emailid" required>
+                                        <input type="email_address" class="form-control" name="email" id="email" placeholder="Email address" required>
                                     </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" name="fullname" id="fullname" placeholder="FullName" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="tel" class="form-control" name="phone" id="phone" placeholder="Phone number" required>
+                                    </div> 
+                                    {% comment %} END {% endcomment %}
                                     <div class="form-group">
                                         <input type="password" class="form-control" id="passwd" name="passwd" placeholder="New Password" required>
                                         <small id="passHelp" class="form-text text-muted">Make sure nobody's behind you</small>

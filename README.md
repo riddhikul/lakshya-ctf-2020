@@ -20,7 +20,8 @@ lakshya@ctf:$ cd lakshya-ctf-2020
 lakshya@ctf:$ virtualenv venv
 lakshya@ctf:$ source venv/bin/activate 
 lakshya@ctf:$ pip install -r requirements.txt
-
+# Create .env file and copy the .env.example file to .env
+lakshya@ctf:$ cp .env.example .env
 ```
 
 Migrate the Django SQLite database before running the server. 

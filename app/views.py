@@ -81,11 +81,16 @@ def register(request):
 
 		team.username = request.POST.get("teamname")
 		team.password = make_password(request.POST.get("passwd"))
-		team.email = request.POST.get("email")
 
-		print({'sername': team.username})
+		team.email = request.POST.get("email")
+		team.fullname = request.POST.get("fullname")
+		team.phone = request.POST.get("phone")
+
+		print({'username': team.username})
 		print({'email': team.email})
 		print({'password': team.password})
+		print({'fullname': team.fullname})
+		print({'phone': team.phone})
 
 		try:
 			team.clean_fields()
