@@ -19,6 +19,7 @@ QUESTION_CATEGORY = (("web", "Web"), ("reversing", "Reversing"), ("steg", "Stega
 
 
 class Team(AbstractUser):
+    id = models.AutoField(primary_key=True)
     fullname = models.CharField(max_length=255)
     phone = models.CharField(max_length=15)
 
@@ -109,7 +110,7 @@ class Machines(models.Model):
 
 
 class SolvedTimestamps(models.Model):
-
+    id = models.AutoField(primary_key=True)
     username = models.ForeignKey(Team, on_delete=models.CASCADE)
     timestamp_record = models.DateTimeField(default=timezone.localtime)
     points = models.IntegerField(default=0)
@@ -118,15 +119,18 @@ class SolvedTimestamps(models.Model):
         return f"{self.timestamp_record.year}-{self.timestamp_record.month}-{self.timestamp_record.day} {self.timestamp_record.hour}:{self.timestamp_record.minute}:{self.timestamp_record.second}"
 
 class SolvedQuestions(models.Model):
+    id = models.AutoField(primary_key=True)
     question = models.ForeignKey(Questions,on_delete=models.CASCADE)
     user = models.ForeignKey(Team, on_delete=models.CASCADE)
 
 class SolvedMachines(models.Model):
+    id = models.AutoField(primary_key=True)
     machine = models.ForeignKey(Machines,on_delete=models.CASCADE)
     user = models.ForeignKey(Team,on_delete=models.CASCADE)
     root = models.BooleanField(default = False)
 
 class TakenQuestionHint(models.Model):
+    id = models.AutoField(primary_key=True)
     question = models.ForeignKey(Questions,on_delete=models.CASCADE)
     user = models.ForeignKey(Team,on_delete=models.CASCADE)
     hint = models.BooleanField(default = False)
