@@ -55,6 +55,7 @@ MIDDLEWARE = [
 	"django.contrib.auth.middleware.AuthenticationMiddleware",
 	"django.contrib.messages.middleware.MessageMiddleware",
 	"django.middleware.clickjacking.XFrameOptionsMiddleware",
+	
 ]
 
 ROOT_URLCONF = "CTFFinal.urls"
@@ -179,7 +180,10 @@ AUTH_USER_MODEL = "app.Team"
 
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATICFILES_STORAGE = 'app.storage.ForgivingManifestStaticFilesStorage'
+# STATICFILES_STORAGE = 'app.storage.ForgivingManifestStaticFilesStorage'
+
+# Added to enable admin page in development.
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
@@ -224,6 +228,5 @@ else:
 	EMAIL_USE_TLS = True
 	DEFAULT_FROM_EMAIL = 'Lakshya CTF Team <noreply@pictinc.org>'
 	EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
 
 
