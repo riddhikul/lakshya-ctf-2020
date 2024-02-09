@@ -357,3 +357,47 @@ def validate_username(request):
 		data["error_message"] = "A user with this username already exists."
 	return JsonResponse(data)
 
+
+
+
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.models import User
+from django.core.mail import send_mail
+from django.http import HttpResponse
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.contrib import messages
+def custom_password_reset(request):
+	
+    if request.method == 'POST':
+        email = request.POST.get('email')
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            # Handle the case where the email is not associated with any user
+            messages.error(request, 'No user with this email address.')
+            return redirect('custom_password_reset')
+
+        # Generate a token for password reset
+        token = default_token_generator.make_token(user)
+
+        # Build the password reset link
+        uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
+        reset_url = reverse('custom_password_reset_confirm', kwargs={'uidb64': uidb64, 'token': token})
+
+        # Send an email with the password reset link
+        send_mail(
+            'Password Reset',
+            f'Click the following link to reset your password: {request.build_absolute_uri(reset_url)}',
+            'from@example.com',
+            [email],
+            fail_silently=False,
+        )
+
+        messages.success(request, 'Password reset email sent. Check your inbox.')
+        return redirect('custom_password_reset')
+
+    return render(request, '/registration/password_reset_form.html')

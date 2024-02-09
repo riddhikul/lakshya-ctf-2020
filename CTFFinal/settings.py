@@ -28,13 +28,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'os.environ.get("SECRET_KEY")'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG") == "True"
+# DEBUG = os.environ.get("DEBUG") == "True"
+DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
 INSTALLED_APPS = [
 	"constance",
+	"corsheaders",
 	"app",
 	"storages",
 	"constance.backends.database",
@@ -49,6 +51,8 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
 	"django.middleware.security.SecurityMiddleware",
 	"whitenoise.middleware.WhiteNoiseMiddleware",
+	"corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
 	"django.contrib.sessions.middleware.SessionMiddleware",
 	"django.middleware.common.CommonMiddleware",
 	"django.middleware.csrf.CsrfViewMiddleware",
@@ -218,15 +222,15 @@ if MODE == 'production':
 	SECURE_REFERRER_POLICY = 'same-origin'
 
 
-if MODE == 'development':
-	EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' 
-else:
-	EMAIL_HOST = os.environ.get("EMAIL_HOST")
-	EMAIL_PORT = 587
-	EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
-	EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
-	EMAIL_USE_TLS = True
-	DEFAULT_FROM_EMAIL = 'Lakshya CTF Team <noreply@pictinc.org>'
-	EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
+# if MODE == 'development':
+# 	EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' 
+# else:
+	# EMAIL_HOST = os.environ.get("EMAIL_HOST")
+	# EMAIL_PORT = 587
+	# EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+	# EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+	# EMAIL_USE_TLS = True
+	# DEFAULT_FROM_EMAIL = 'Lakshya CTF Team <noreply@pictinc.org>'
+	# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+	
 
