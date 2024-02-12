@@ -20,6 +20,7 @@ from django.utils.timezone import make_aware
 import pytz
 
 
+
 def handler404(request, exception, *args, **kwargs):
 	response = render(None,"404.html")
 	response.status_code = 404
@@ -142,6 +143,12 @@ def about(request):
 
 @login_required(login_url="/login/")
 def waiting(request):
+	if timezone.localtime().timestamp() > config.START_TIME.timestamp() and timezone.localtime().timestamp() < config.END_TIME.timestamp():
+		return redirect('/quest')
+
+	if timezone.localtime().timestamp() > config.END_TIME.timestamp():
+		return redirect('/leaderboard')
+	
 	return render(request,"app/waiting.html")
 
 
@@ -222,7 +229,6 @@ def teamlogout(request):
 
 @login_required(login_url="/login/")
 def quest(request):
-
 	if timezone.localtime().timestamp() < config.START_TIME.timestamp():
 		return redirect('/waiting')
 

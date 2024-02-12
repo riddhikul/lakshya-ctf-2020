@@ -25,11 +25,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'os.environ.get("SECRET_KEY")'
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = os.environ.get("DEBUG") == "True"
-DEBUG = True
+DEBUG = os.environ.get("DEBUG") == 'True'
+
 ALLOWED_HOSTS = ["*"]
 
 # Application definition
@@ -98,20 +98,14 @@ if MODE == 'development':
 elif MODE == 'production':
 	
 	DATABASES = {
-	
-		"default": dj_database_url.config(),
-
-		"receipts": {
-			"ENGINE": "django.db.backends.mysql",
-			"NAME": os.environ.get("DB_NAME"),
-			"HOST": os.environ.get("DB_HOST"),
-			"PORT": 3306,
-			"USER": os.environ.get("DB_USER"),
-			"PASSWORD": os.environ.get("DB_PASSWORD"),
-			"OPTIONS": {
-				"init_command": "SET sql_mode='STRICT_TRANS_TABLES'"
-			},
-		},
+	    'default': {
+	        'ENGINE': 'django.db.backends.postgresql',
+	        'HOST': os.environ.get('POSTGRES_HOST'),
+	        'NAME': os.environ.get('POSTGRES_NAME'),
+	        'USER': os.environ.get('POSTGRES_USER'),
+	        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+	        'PORT': os.environ.get('POSTGRES_PORT', 5432),
+	    }
 	}
 
 if MODE == 'development':
@@ -123,17 +117,19 @@ if MODE == 'development':
 	}
 elif MODE == 'production':
 	CACHES = {
-    	
-    	'default': {
-        	'BACKEND': 'django_bmemcached.memcached.BMemcached',
-        	'LOCATION': os.environ['MEMCACHIER_SERVERS'],
-
-        	'OPTIONS': {
-            'username': os.environ['MEMCACHIER_USERNAME'],
-            'password': os.environ['MEMCACHIER_PASSWORD'],
-        	}
-    	}
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        # 'LOCATION': 'redis://127.0.0.1:6379/1', #redis://127.0.0.1:6379/
+        'LOCATION': 'redis://redis:6379/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+		}
 	}
+	SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+	SESSION_CACHE_ALIAS = "default" 
+
+
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
@@ -222,15 +218,13 @@ if MODE == 'production':
 	SECURE_REFERRER_POLICY = 'same-origin'
 
 
-# if MODE == 'development':
-# 	EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' 
-# else:
-	# EMAIL_HOST = os.environ.get("EMAIL_HOST")
-	# EMAIL_PORT = 587
-	# EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
-	# EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
-	# EMAIL_USE_TLS = True
-	# DEFAULT_FROM_EMAIL = 'Lakshya CTF Team <noreply@pictinc.org>'
-	# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = os.environ.get("EMAIL_HOST")
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'Lakshya CTF Team <noreply@pictinc.org>'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 	
 

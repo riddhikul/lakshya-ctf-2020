@@ -1,28 +1,46 @@
-version: '2.0'
+version: '3.2'
 services:
-  memcached:
-    image: "memcached:alpine"
+  nginx:
+    build: ./nginx
+    volumes:
+      - ./staticfiles:/app/staticfiles
     ports:
-      - "11211:11211"
+      - "80:80"
+      # - "443:443"
+    depends_on:
+      - web
+    restart: "on-failure"
+
+  redis:
+    restart: unless-stopped
+    image: redis:alpine
+    expose:
+        - 6379
+
   db:
     image: "postgres:13-alpine"
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
     environment: 
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-    ports:
-      - "5432:5432"
+
   web:
-    env_file: env
-    environment:
-      - DEBUG=False
-      - MODE=production
     build: .
-    restart: always
-    ports: 
-      - "8000:8000"
+    # restart: always
+    command: sh -c "python manage.py makemigrations &&
+                    python manage.py migrate &&
+                    python manage.py collectstatic --no-input &&
+                    gunicorn CTFFinal.wsgi:application --bind 0.0.0.0:8000"
     volumes:
       - .:/app
+      - static_volume:/app/staticfiles
     depends_on:
       - db
-      - memcached
+      - redis
+
+volumes:
+  static_volume:
+  postgres_data:

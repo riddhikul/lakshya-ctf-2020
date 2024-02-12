@@ -32,6 +32,8 @@ class Team(AbstractUser):
 
     def __str__(self):
         return self.username
+    
+
 class TeamAdmin(admin.ModelAdmin):
 
     def export_as_csv(self, request, queryset):
@@ -55,6 +57,7 @@ class TeamAdmin(admin.ModelAdmin):
     list_display = ("username", "timeRequired", "points", "email", "fullname", "phone")
     readonly_fields = ("password", "points", "timeRequired")
     search_fields = ["username", "timeRequired", "points"]
+    
 class Questions(models.Model):
 
     questionId = models.AutoField(primary_key=True,verbose_name = "ID")
