@@ -8,6 +8,13 @@ ALLOWED_HOSTS = [os.environ['WEBSITE_HOSTNAME']]
 CSRF_TRUSTED_ORIGINS = ['https://' + os.environ['WEBSITE_HOSTNAME']]
 DEBUG = False
 
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(' ')
+
+SECURE_SSL_REDIRECT = \
+    os.getenv('SECURE_SSL_REDIRECT', '0').lower() in ['true', 't', '1']
+if SECURE_SSL_REDIRECT:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 # WhiteNoise configuration
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -46,6 +53,25 @@ CACHES = {
                 "COMPRESSOR": "django_redis.compressors.zlib.ZlibCompressor",
         },
     }
+}
+
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
+CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+
+CONSTANCE_ADDITIONAL_FIELDS = {
+    'timezone_select': ['django.forms.fields.ChoiceField', {
+        'widget': 'django.forms.Select',
+        'choices': tuple(zip(all_timezones,all_timezones))
+    }],
+}
+
+CONSTANCE_CONFIG = {
+    
+    'END_TIME': (timezone.now() + timedelta(minutes = 60),'End Time of the Event',datetime),
+    'START_TIME': (timezone.now(),'Start Time of the Event',datetime),
+    'TIME_ZONE': ('Asia/Calcutta','Set the Time Zone','timezone_select')
 }
 
 
