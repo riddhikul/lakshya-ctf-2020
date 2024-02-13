@@ -1,31 +1,16 @@
-version: '3.2'
+version: '3'
+
 services:
   nginx:
     build: ./nginx
     volumes:
-      - ./staticfiles:/app/staticfiles
+      - ./static:/app/static
     ports:
       - "80:80"
       # - "443:443"
     depends_on:
       - web
     restart: "on-failure"
-
-  redis:
-    restart: unless-stopped
-    image: redis:alpine
-    expose:
-        - 6379
-
-  db:
-    image: "postgres:13-alpine"
-    restart: unless-stopped
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-    environment: 
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
 
   web:
     build: .
@@ -34,12 +19,33 @@ services:
                     python manage.py migrate &&
                     python manage.py collectstatic --no-input &&
                     gunicorn CTFFinal.wsgi:application --bind 0.0.0.0:8000"
+                    # python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/app
-      - static_volume:/app/staticfiles
+      - ./static:/app/static
     depends_on:
       - db
       - redis
+    env_file:
+      - .env
+
+  redis:
+    restart: unless-stopped
+    image: redis:alpine
+    expose:
+      - 6379
+
+  db:
+    image: postgres:13-alpine
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment: 
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+  
 
 volumes:
   static_volume:

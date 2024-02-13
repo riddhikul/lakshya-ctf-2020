@@ -179,7 +179,7 @@ MEDIA_URL = "downloads/"
 AUTH_USER_MODEL = "app.Team"
 
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 # STATICFILES_STORAGE = 'app.storage.ForgivingManifestStaticFilesStorage'
 
 # Added to enable admin page in development.
