@@ -96,7 +96,7 @@ if MODE == 'development':
 	}
 
 elif MODE == 'production':
-	
+	print("prod db")
 	DATABASES = {
 	    'default': {
 	        'ENGINE': 'django.db.backends.postgresql',
@@ -116,6 +116,7 @@ if MODE == 'development':
 	    }
 	}
 elif MODE == 'production':
+	print("prod redis")
 	CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
@@ -207,15 +208,17 @@ DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
 DROPBOX_OAUTH2_TOKEN = os.environ.get("DROPBOX_OAUTH2_TOKEN")
 
 
-if MODE == 'production':
-	SESSION_COOKIE_SECURE = True
-	CSRF_COOKIE_SECURE = True
-	SECURE_BROWSER_XSS_FILTER = True
-	SECURE_SSL_REDIRECT = True
-	SECURE_HSTS_SECONDS = 43200
-	SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-	SECURE_HSTS_PRELOAD = True
-	SECURE_REFERRER_POLICY = 'same-origin'
+# activate it only when ssl is active
+# if MODE == 'production':
+# 	print("prod setting")
+# 	SESSION_COOKIE_SECURE = True
+# 	CSRF_COOKIE_SECURE = True
+# 	SECURE_BROWSER_XSS_FILTER = True
+# 	SECURE_SSL_REDIRECT = True
+# 	SECURE_HSTS_SECONDS = 43200
+# 	SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+# 	SECURE_HSTS_PRELOAD = True
+# 	SECURE_REFERRER_POLICY = 'same-origin'
 
 
 
