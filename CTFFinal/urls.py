@@ -39,7 +39,6 @@ handler500 = "app.views.handler500"
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('gethost/', views.getHost, name='host'),
     path("", views.index),
     path("login/", views.teamlogin),
     path("register/", views.register),
