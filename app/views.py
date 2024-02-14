@@ -18,7 +18,7 @@ from django.db.models.query import QuerySet
 from datetime import datetime
 from django.utils.timezone import make_aware
 import pytz
-
+import re
 
 def handler404(request, exception, *args, **kwargs):
 	response = render(None,"404.html")
@@ -82,9 +82,23 @@ def register(request):
 		team.username = request.POST.get("teamname")
 		team.password = make_password(request.POST.get("passwd"))
 
-		team.email = request.POST.get("email")
 		team.fullname = request.POST.get("fullname")
-		team.phone = request.POST.get("phone")
+
+		
+		email = request.POST.get("email")
+		email_pattern = re.compile(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
+		if not email_pattern.match(email):
+			messages.error(request, "Invalid email address. Please enter a valid email.")
+			return render(request, "app/register.html")
+		
+		team.email = email
+
+		phone_number = request.POST.get("phone")
+		if not phone_number.isdigit() or (len(phone_number) != 10 and len(phone_number) != 12):
+			messages.error(request, "Invalid phone number. Please enter a valid 10-digit phone number.")
+			return render(request, "app/register.html")
+		
+		team.phone = phone_number
 
 		print({'username': team.username})
 		print({'email': team.email})
