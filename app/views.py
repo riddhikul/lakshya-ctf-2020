@@ -94,7 +94,7 @@ def register(request):
 		team.email = email
 
 		phone_number = request.POST.get("phone")
-		if not phone_number.isdigit() or (len(phone_number) != 10 and len(phone_number) != 12):
+		if not phone_number.isdigit() or (len(phone_number) != 10):
 			messages.error(request, "Invalid phone number. Please enter a valid 10-digit phone number.")
 			return render(request, "app/register.html")
 		
