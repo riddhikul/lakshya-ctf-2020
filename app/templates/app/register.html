@@ -156,10 +156,7 @@
             },
             dataType: 'json',
             success: function (data) {
-                console.log(data);
-                if (data.is_taken) {
-                  console.log("enter");
-
+              if (data.is_taken) {
                 $("#teamname").removeClass("is-valid").addClass('is-invalid');
               }
               else{

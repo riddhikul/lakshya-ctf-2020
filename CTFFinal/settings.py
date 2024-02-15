@@ -30,9 +30,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG") == 'True'
 
-ALLOWED_HOSTS = []
-
-
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -182,7 +180,7 @@ MEDIA_URL = "downloads/"
 AUTH_USER_MODEL = "app.Team"
 
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 # STATICFILES_STORAGE = 'app.storage.ForgivingManifestStaticFilesStorage'
 
 # Added to enable admin page in development.

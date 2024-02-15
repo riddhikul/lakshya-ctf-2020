@@ -19,6 +19,14 @@ from datetime import datetime
 from django.utils.timezone import make_aware
 import pytz
 import re
+import socket
+import time
+def getHost(request):
+    time.sleep(2)
+    s= socket.gethostname()
+    # ip_address = socket.gethostbyname(hostname)
+
+    return HttpResponse(f"Hello Prash docker address : {s}")
 
 def handler404(request, exception, *args, **kwargs):
 	response = render(None,"404.html")
@@ -83,8 +91,6 @@ def register(request):
 		team.password = make_password(request.POST.get("passwd"))
 
 		team.fullname = request.POST.get("fullname")
-
-		
 		email = request.POST.get("email")
 		email_pattern = re.compile(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
 		if not email_pattern.match(email):
@@ -142,7 +148,6 @@ def profile(request,username):
 	return render(request,"app/profile.html",{"user":user,"challenges_solved":len(vals),"root_owns":root_owns,"timestamps":timestamps,"stats":stats})
 
 def index(request):
-	
 	return render(request, "app/index.html")
 
 
