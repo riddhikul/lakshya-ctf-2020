@@ -204,8 +204,8 @@ CONSTANCE_CONFIG = {
     'TIME_ZONE': ('Asia/Calcutta','Set the Time Zone','timezone_select')
 }
 
-DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
-DROPBOX_OAUTH2_TOKEN = os.environ.get("DROPBOX_OAUTH2_TOKEN")
+# DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
+# DROPBOX_OAUTH2_TOKEN = os.environ.get("DROPBOX_OAUTH2_TOKEN")
 
 
 # activate it only when ssl is active

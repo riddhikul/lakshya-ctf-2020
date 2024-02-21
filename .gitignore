@@ -130,3 +130,7 @@ dmypy.json
 # Dev stuff
 # Pyre type checker
 .pyre/
+
+
+# static
+static
